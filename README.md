@@ -2,7 +2,11 @@
 
 Sentinels of Truth is a multi-agent AI-powered fact verification and knowledge management system designed to analyze news claims, detect misinformation, and maintain a structured verification database.
 
-The project combines semantic similarity search, live evidence collection, fact-check APIs, and LLM-based reasoning to evaluate whether a claim is verified, fake, uncertain, or contradictory to existing knowledge.
+The system combines semantic similarity search, live evidence collection, fact-check APIs, and LLM-based reasoning to evaluate whether a claim is verified, fake, uncertain, or contradictory to existing knowledge.
+
+## GitHub Repository
+
+https://github.com/tjayush/sentinels-of-truth
 
 ---
 
@@ -19,35 +23,143 @@ The project combines semantic similarity search, live evidence collection, fact-
 - Interactive Flask web interface
 - Agent activity tracking logs
 - Duplicate claim prevention
+- Human-readable verification reports
+- Automatic database decision handling
+
+---
+
+# Application Screenshots
+
+## Home Dashboard
+
+The main verification dashboard where users can submit claims, view verification results, confidence scores, evidence summaries, and agent activity logs.
+
+![Home Dashboard](screenshots/home.png)
+
+---
+
+## Knowledge Base Dashboard
+
+The database view showing stored verified/fake claims along with confidence scores and timestamps.
+
+![Knowledge Base](screenshots/claims.png)
 
 ---
 
 # System Architecture
 
-The platform follows a two-agent collaborative workflow:
+The platform follows a collaborative multi-agent workflow.
+
+---
 
 ## Agent Alpha — Investigator
 
 Responsible for:
+
 - Collecting external evidence
 - Searching Wikipedia
-- Searching recent news sources
+- Searching recent news articles
 - Querying fact-check databases
-- Performing semantic similarity search
+- Performing semantic similarity analysis
+- Optimizing long claims into search-friendly queries
 - Sending compiled evidence to the reasoning engine
+
+---
 
 ## Agent Beta — Archivist
 
 Responsible for:
+
 - Evaluating verification results
-- Managing long-term database storage
-- Detecting contradictions
+- Managing database storage operations
+- Detecting contradictions with historical records
 - Preventing duplicate entries
 - Flagging suspicious conflicts for human review
+- Handling uncertain claims safely
+
+---
 
 ## Orchestrator
 
-Coordinates communication between agents and manages the shared system state.
+Responsible for:
+
+- Managing communication between agents
+- Maintaining shared runtime state
+- Coordinating the full verification pipeline
+- Preventing pipeline crashes through safe fallback handling
+
+---
+
+# Core Logic Used in the System
+
+The project uses a layered verification workflow instead of relying on a single API response.
+
+---
+
+## Step 1 — Claim Processing
+
+User submits a news headline or article.
+
+The system:
+
+- Cleans the text
+- Detects long/noisy inputs
+- Creates optimized search queries for APIs
+
+---
+
+## Step 2 — Semantic Memory Check
+
+The system compares the incoming claim against previously stored claims using semantic similarity matching.
+
+Possible outcomes:
+
+- Similar claim already exists
+- Contradictory historical claim exists
+- Completely new claim detected
+
+---
+
+## Step 3 — Evidence Collection
+
+The Investigator Agent collects evidence from:
+
+- Wikipedia summaries
+- Recent news articles
+- Fact-check databases
+
+Evidence is compressed and structured before reasoning.
+
+---
+
+## Step 4 — AI Reasoning Engine
+
+The Gemini reasoning engine evaluates:
+
+- Claim consistency
+- Evidence agreement
+- Fact-check alignment
+- Similarity confidence
+
+The engine generates:
+
+- Verification status
+- Confidence score
+- Evidence summary
+
+---
+
+## Step 5 — Database Governance
+
+The Archivist Agent decides whether to:
+
+| Decision | Meaning |
+|---|---|
+| INSERTED | Claim stored in database |
+| DISCARD | Duplicate claim ignored |
+| FLAGGED | Contradiction detected |
+| REJECTED | Fake claim recorded |
+| UNCERTAIN | Not enough evidence |
 
 ---
 
@@ -55,6 +167,10 @@ Coordinates communication between agents and manages the shared system state.
 
 ```bash
 sentinels-of-truth/
+│
+├── screenshots/
+│   ├── home.png
+│   └── claims.png
 │
 ├── app.py
 │
@@ -89,34 +205,6 @@ sentinels-of-truth/
 
 ---
 
-# Workflow
-
-1. User submits a news claim
-2. Investigator Agent gathers evidence
-3. Semantic similarity search checks historical memory
-4. Wikipedia, news APIs, and fact-check systems are queried
-5. Gemini reasoning engine evaluates the claim
-6. Archivist Agent decides whether to:
-   - INSERT
-   - DISCARD
-   - FLAG
-   - REJECT
-7. Results are displayed on the dashboard
-
----
-
-# Verification Decisions
-
-| Decision | Description |
-|---|---|
-| INSERTED | Verified/Fake claim stored in database |
-| DISCARD | Duplicate or redundant claim |
-| FLAGGED | Contradictory claim requiring human review |
-| REJECTED | Fake content recorded as blocked misinformation |
-| UNCERTAIN | Insufficient evidence available |
-
----
-
 # Technologies Used
 
 - Python
@@ -133,34 +221,15 @@ sentinels-of-truth/
 
 # Installation
 
-## Clone the repository
+## Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/sentinels-of-truth.git
-cd sentinels-of-truth
+git clone https://github.com/tjayush/sentinels-of-truth.git
 ```
 
-## Create virtual environment
+---
 
-```bash
-python -m venv venv
-```
-
-## Activate environment
-
-### Windows
-
-```bash
-venv\Scripts\activate
-```
-
-### Linux / Mac
-
-```bash
-source venv/bin/activate
-```
-
-## Install dependencies
+## Install Dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -174,7 +243,7 @@ pip install -r requirements.txt
 python app.py
 ```
 
-Then open:
+Open in browser:
 
 ```text
 http://127.0.0.1:5000
@@ -186,18 +255,17 @@ http://127.0.0.1:5000
 
 ## Verified Claims
 
-- India successfully landed Chandrayaan-3 near the Moon’s south pole in 2023.
-- The ICC Men's Cricket World Cup 2023 final was held in Ahmedabad.
+- India successfully landed Chandrayaan-3 near the south pole of the Moon in 2023.
+- The ICC Men's Cricket World Cup 2023 final was hosted in Ahmedabad.
+- ISRO launched Aditya-L1 to study the Sun.
+
+---
 
 ## Fake Claims
 
-- Archaeologists discovered a secret tunnel connecting India and Sri Lanka.
+- Archaeologists discovered a secret underground tunnel connecting India and Sri Lanka.
 - India found alien life on Mars.
-
-## Complex / Ambiguous Claims
-
-- India introduced a new semi-cryogenic launch vehicle architecture.
-- A regional digital finance exchange standard was proposed in New Delhi.
+- A hidden ancient city was discovered beneath the Indian Ocean.
 
 ---
 
@@ -206,15 +274,19 @@ http://127.0.0.1:5000
 ## claims table
 
 Stores:
+
 - Verified claims
 - Fake claims
 - Confidence scores
 - Evidence summaries
 - Timestamps
 
+---
+
 ## flagged_claims table
 
 Stores:
+
 - Contradictory claims
 - Human review cases
 - Conflict reasons
@@ -230,6 +302,7 @@ Stores:
 - Source credibility scoring
 - Explainable reasoning visualization
 - Real-time streaming verification
+- Improved evidence ranking
 
 ---
 
@@ -243,14 +316,14 @@ Human review is recommended for ambiguous or conflicting claims.
 
 # Author
 
-Ayushman Sarkar
+## Ayushman Sarkar
 
-B.Tech CSE Student  
-Research Interest Areas:
+B.Tech CSE Student
+
+### Research Interest Areas
+
 - Artificial Intelligence
 - Explainable AI
 - Cybersecurity
 - Multi-Agent Systems
 - Misinformation Detection
-
-```
