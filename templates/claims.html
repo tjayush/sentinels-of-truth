@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Knowledge Base</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+    <div class="main-container">
+
+        <div class="header">
+
+            <h1>Knowledge Base</h1>
+
+            <p>
+                Verified Claims Stored in Database
+            </p>
+
+        </div>
+
+        <a href="/">
+            <button class="secondary-btn">
+                Back to Home
+            </button>
+        </a>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Claim</th>
+                        <th>Status</th>
+                        <th>Confidence</th>
+                        <th>Timestamp</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for claim in claims %}
+
+                    <tr>
+
+                        <td>{{ claim.id }}</td>
+
+                        <td>{{ claim.claim }}</td>
+
+                        <td>{{ claim.status }}</td>
+
+                        <td>{{ claim.confidence }}</td>
+
+                        <td>{{ claim.timestamp }}</td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

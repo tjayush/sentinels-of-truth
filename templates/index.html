@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Sentinels of Truth</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+    <div class="main-container">
+
+        <div class="header">
+
+            <h1>Sentinels of Truth</h1>
+
+            <p>
+                Multi-Agent Verification &
+                Knowledge Management System
+            </p>
+
+        </div>
+
+        <div class="input-section">
+
+            <input type="text"
+                   id="claimInput"
+                   placeholder="Enter a news claim">
+
+            <button onclick="verifyClaim()">
+                Verify Claim
+            </button>
+
+            <a href="/claims">
+                <button class="secondary-btn">
+                    View Knowledge Base
+                </button>
+            </a>
+
+        </div>
+
+        <div id="result-card"
+             class="result-card hidden">
+
+            <h2>Verification Result</h2>
+
+            <div class="result-item">
+                <strong>Claim:</strong>
+                <span id="claimText"></span>
+            </div>
+
+            <div class="result-item">
+                <strong>Status:</strong>
+                <span id="statusText"></span>
+            </div>
+
+            <div class="result-item">
+                <strong>Confidence:</strong>
+                <span id="confidenceText"></span>
+            </div>
+
+            <div class="result-item">
+                <strong>Evidence:</strong>
+                <span id="evidenceText"></span>
+            </div>
+
+            <div class="result-item">
+                <strong>Database Decision:</strong>
+                <span id="decisionText"></span>
+            </div>
+
+        </div>
+
+        <div id="logs-card"
+             class="logs-card hidden">
+
+            <h2>Agent Activity Logs</h2>
+
+            <ul id="logsList"></ul>
+
+        </div>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+
+</html>
